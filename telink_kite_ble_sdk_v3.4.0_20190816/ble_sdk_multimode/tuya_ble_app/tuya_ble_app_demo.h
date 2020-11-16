@@ -8,7 +8,7 @@ extern "C" {
 
 
 
-#define APP_PRODUCT_ID          "hu78rgbc"//"xxxxxxxx"
+#define APP_PRODUCT_ID          "przwh7nj"//"xxxxxxxx"
 
 #define APP_BUILD_FIRMNAME      "tuya_ble_sdk_demo_tlsr825x"
 
