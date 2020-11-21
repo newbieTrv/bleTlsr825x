@@ -701,8 +701,23 @@ typedef struct
 	  uint8_t   auth_key[AUTH_KEY_LEN];
       uint8_t   mac_string[MAC_LEN*2];
 	  uint8_t  res[128];
-}tuya_ble_auth_settings_t;   
 
+}tuya_ble_auth_settings_t;   
+/*
+typedef struct
+{
+      uint32_t  crc;
+	  uint32_t  settings_version;
+	  uint8_t   h_id[H_ID_LEN+1];
+	  uint8_t   device_id[DEVICE_ID_LEN];
+	  uint8_t   mac[MAC_LEN];
+      uint8_t   mac_string[MAC_LEN*2];
+      uint8_t   pid[8];
+      uint8_t   auth_key[AUTH_KEY_LEN];
+	  //uint8_t  res[128];
+
+}tuya_ble_auth_settings_t;
+*/
 
 typedef struct
 {

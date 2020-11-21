@@ -8,9 +8,9 @@ extern "C" {
 
 
 
-#define APP_PRODUCT_ID          "pawjvakg"//"xxxxxxxx"
+#define APP_PRODUCT_ID          "lfdhsrh4"//"xxxxxxxx"
 
-#define APP_BUILD_FIRMNAME      "fx_demo_car_pawjvakg"
+#define APP_BUILD_FIRMNAME      "KF_tls_ble_demo2_8250"
 
 //
 #define TY_APP_VER_NUM       0x0101
