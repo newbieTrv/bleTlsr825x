@@ -106,6 +106,16 @@
 
 
 
+//fx ------------------------------
+//在gatt_uuid.h中添加fx自定义的服务及特征值的uuid
+#define SERVICE_UUID_MG_TMHR                                      0x1000
+
+//MG add
+#define CHARACTERISTIC_UUID_MG_TMHR_RX                            0x1001
+#define CHARACTERISTIC_UUID_MG_TMHR_TX                            0x1002
+
+//fx ------------------------------end
+
 /** @addtogroup  GATT_UUID_Variables GATT UUID variables
  *  @{
  */

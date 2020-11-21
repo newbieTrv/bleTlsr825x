@@ -163,6 +163,7 @@ tuya_ble_status_t tuya_ble_gatt_receive_data(uint8_t *p_data,uint16_t len)
         event.mtu_data.len = len;
     }
     memcpy(event.mtu_data.data,p_data,event.mtu_data.len);
+
     if(tuya_ble_event_send(&event)!=0)
     {
         TUYA_BLE_LOG_ERROR("tuya_event_send ble data error,data len = %d ", event.mtu_data.len);

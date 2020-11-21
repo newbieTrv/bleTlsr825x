@@ -80,6 +80,34 @@ extern  u8 ble_devName[];
 static const u8 my_PnPtrs [] = {0x02, 0x8a, 0x24, 0x66, 0x82, 0x01, 0x00};
 
 
+//fx------------------------
+//uuid 定义
+static const u16 MG_TMHR_Service_UUID     = SERVICE_UUID_MG_TMHR;
+static const u16 MG_TMHR_RX_CharUUID      = CHARACTERISTIC_UUID_MG_TMHR_RX;
+static const u16 MG_TMHR_TX_CharUUID      = CHARACTERISTIC_UUID_MG_TMHR_TX;
+
+// 输入输出数据缓存
+//MG add
+static u8 MG_TMHR_In[2];
+static u8 MG_TMHR_InCCC[2];
+static u8 MG_TMHR_Out[2];
+
+//特征值定义
+static const u8 MG_TMHR_CharVal_RX[5] = {
+    CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP | CHAR_PROP_NOTIFY,
+    U16_LO(MG_TMHR_INPUT_DP_H),U16_HI(MG_TMHR_INPUT_DP_H),
+    U16_LO(CHARACTERISTIC_UUID_MG_TMHR_RX),U16_HI(CHARACTERISTIC_UUID_MG_TMHR_RX)
+};
+static const u8 MG_TMHR_CharVal_TX[5] = {
+    CHAR_PROP_READ | CHAR_PROP_NOTIFY,
+    U16_LO(MG_TMHR_OUTPUT_DP_H),U16_HI(MG_TMHR_OUTPUT_DP_H),
+    U16_LO(CHARACTERISTIC_UUID_MG_TMHR_TX),U16_HI(CHARACTERISTIC_UUID_MG_TMHR_TX)
+};
+
+//添加自定义include服务
+static const u16 MG_include[3] = {MG_TMHR_PS_H,MG_TMHR_INPUT_CCB_H,SERVICE_UUID_MG_TMHR};
+
+//fx------------------------end
 
 //////////////////////// OTA  ////////////////////////////////////////////////////
 static const  u8 my_OtaUUID[16]					    = TELINK_SPP_DATA_OTA;
@@ -165,6 +193,7 @@ static const u8 my_OtaCharVal[19] =
 
 int module_onReceiveData(rf_packet_att_write_t *p)
 {
+
 	u8 len = p->l2capLen - 3;
 //	if(len > 0)
 //	{
@@ -252,6 +281,33 @@ u8  TuyaSppDataClient2ServerData[ATT_MTU_SIZE - 3];
 const u8 TuyaSPPS2CDescriptor[] = "Module->Phone";
 const u8 TuyaSPPC2SDescriptor[] = "Phone->Module";
 
+//fx---------------------------
+//写回调函数
+//static unsigned char led_status= 0;
+int MG_TMHR_Write_CB(void *p)
+{
+    rf_packet_att_data_t *pw = (rf_packet_att_data_t*)p;
+    int len = pw->l2cap - 3;
+	int i=0;
+
+#if 1
+	tuya_log_dumpHex("fx uuid rx:  ", 16, pw->dat, sizeof(pw->dat));
+#else
+    //打印数据
+    for(i=0; i<len; i++)
+    {
+    	printf("Data[%d] is: %d \r\n",i,pw->dat[i]);
+	}
+#endif
+    //io翻转
+    //gpio_toggle(GPIO_PD2);
+    //回复数据
+    bls_att_pushNotifyData(MG_TMHR_OUTPUT_DP_H,&pw->dat,len);
+    return 1;
+}
+
+//fx---------------------------end
+
 const attribute_t tuya_Attributes[] =
 {
    {ATT_END_H - 1, 0,0,0,0,0},	// total num of attribute
@@ -278,13 +334,37 @@ const attribute_t tuya_Attributes[] =
 
 	// 000f - 0016 SPP
 	{8,ATT_PERMISSIONS_READ,2,2,(u8*)(&my_primaryServiceUUID), 	(u8*)(&TuyaSppServiceUUID), 0},
-	{0,ATT_PERMISSIONS_READ,2,1,(u8*)(&my_characterUUID), 		(u8*)(&TuyaSppDataServer2ClientProp), 0},				//prop
+	/*data-Tx*/
+	{0,ATT_PERMISSIONS_READ,2,1,(u8*)(&my_characterUUID), 		(u8*)(&TuyaSppDataServer2ClientProp), 0},
+	//prop
 	{0,ATT_PERMISSIONS_READ,2,sizeof(SppDataServer2ClientData),(u8*)(&TuyaSppDataServer2ClientUUID), (u8*)(TuyaSppDataServer2ClientData), 0},	//value
 	{0,ATT_PERMISSIONS_RDWR,2,2,(u8*)&clientCharacterCfgUUID,(u8*)(&TuyaSppDataServer2ClientDataCCC)},
 	{0,ATT_PERMISSIONS_READ,2,sizeof(TuyaSPPS2CDescriptor),(u8*)&userdesc_UUID,(u8*)(&TuyaSPPS2CDescriptor)},
+	/*data-Rx*/
 	{0,ATT_PERMISSIONS_READ,2,1,(u8*)(&my_characterUUID), 		(u8*)(&TuyaSppDataClient2ServerProp), 0},				//prop
 	{0,ATT_PERMISSIONS_RDWR,2,sizeof(TuyaSppDataClient2ServerData),(u8*)(&TuyaSppDataClient2ServerUUID), (u8*)(TuyaSppDataClient2ServerData), &module_onReceiveData},	//value
 	{0,ATT_PERMISSIONS_READ,2,sizeof(TuyaSPPC2SDescriptor),(u8*)&userdesc_UUID,(u8*)(&TuyaSPPC2SDescriptor)},
+
+
+	//fx---------------------------
+	//属性表中添加服务,特征值等等,注意对应关系必须和app_config中添加ATT_HANDLE;枚举中的定义对应
+
+	//TMHR data service
+	{6,ATT_PERMISSIONS_READ,2,2,(u8*)(&my_primaryServiceUUID), (u8*)(&MG_TMHR_Service_UUID),0},
+	//   include MG service
+	//{0,ATT_PERMISSIONS_READ,2,sizeof(MG_include),(u8*)(&hidIncludeUUID),     (u8*)(MG_include), 0},
+
+
+	//data RX
+	{0,ATT_PERMISSIONS_READ,2,sizeof(MG_TMHR_CharVal_RX),(u8*)(&my_characterUUID), (u8*)(MG_TMHR_CharVal_RX), 0},    //prop
+	{0,ATT_PERMISSIONS_RDWR,2,2,(u8*)(&MG_TMHR_RX_CharUUID),     (u8*)(MG_TMHR_Out), &MG_TMHR_Write_CB},    //value
+
+	//data TX
+	{0,ATT_PERMISSIONS_READ,2,sizeof(MG_TMHR_CharVal_TX),(u8*)(&my_characterUUID), (u8*)(MG_TMHR_CharVal_TX), 0},    //prop
+	{0,ATT_PERMISSIONS_READ,2, 2,(u8*)(&MG_TMHR_TX_CharUUID),     (u8*)(MG_TMHR_In), 0},    //value
+	{0,ATT_PERMISSIONS_RDWR,2,sizeof(MG_TMHR_InCCC),(u8*)(&clientCharacterCfgUUID),     (u8*)(MG_TMHR_InCCC), 0}
+   //fx---------------------------end
+
 };
 
 void	my_att_init (void)

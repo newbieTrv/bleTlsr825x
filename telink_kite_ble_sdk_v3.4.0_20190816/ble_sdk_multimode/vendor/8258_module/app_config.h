@@ -195,8 +195,22 @@ typedef enum
 //	OTA_CMD_OUT_DP_H,					 //UUID: telink ota uuid,  VALUE: otaData
 //	OTA_CMD_OUT_DESC_H,					 //UUID: 2901, 	VALUE: otaName
 
-	ATT_END_H,
 
+
+	//fx------------------------
+    //在app_config.h的枚举ATT_HANDLE定义中按顺序A添加对应属性句柄的定义
+    MG_TMHR_PS_H,
+    // MG_INCLUDE_H,
+    MG_TMHR_INPUT_CD_H,
+    MG_TMHR_INPUT_DP_H,
+    MG_TMHR_OUTPUT_CD_H,
+    MG_TMHR_OUTPUT_DP_H,
+    MG_TMHR_INPUT_CCB_H,
+
+    //fx------------------------end
+
+
+    ATT_END_H,  // 计数用的
 }ATT_HANDLE;
 
 
