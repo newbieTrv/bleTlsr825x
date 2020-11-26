@@ -8,7 +8,7 @@
 #define key_state_3  3
 
 /***************************************************************************
-³ÌĞò¹¦ÄÜ£ºÒ»¸ö°´¼üµÄµ¥»÷¡¢Ë«»÷¡¢¶Ì°´¡¢³¤°´¡£4ÖÖ°´¼ü·½Ê½£¬È»ºó×ö²»Í¬µÄ´¦Àí¡£
+ç¨‹åºåŠŸèƒ½ï¼šä¸€ä¸ªæŒ‰é”®çš„å•å‡»ã€åŒå‡»ã€çŸ­æŒ‰ã€é•¿æŒ‰ã€‚4ç§æŒ‰é”®æ–¹å¼ï¼Œç„¶ååšä¸åŒçš„å¤„ç†ã€‚
 ***************************************************************************/
 static unsigned char key_driver(void)
 {
@@ -19,7 +19,7 @@ static unsigned char key_driver(void)
       unsigned char IO_Data;
 
       IO_Data = gpio_read(GPIO_PD7);//read the I/O states
-      if(IO_Data)//IOÉèÖÃÎªÉÏÀ­ÊäÈë£¬°´¼üÎ´°´ÏÂÊ±IO_DataÎª>0µÄÊıÖµ£¬¶ø²»ÊÇÎª1
+      if(IO_Data)//IOè®¾ç½®ä¸ºä¸Šæ‹‰è¾“å…¥ï¼ŒæŒ‰é”®æœªæŒ‰ä¸‹æ—¶IO_Dataä¸º>0çš„æ•°å€¼ï¼Œè€Œä¸æ˜¯ä¸º1
       {
             IO_Data = 1;
       }
@@ -33,51 +33,51 @@ static unsigned char key_driver(void)
             case key_state_0:
                   if(key == 0)
                         key_state_buffer1 = key_state_1;
-                        //°´¼ü±»°´ÏÂ£¬×´Ì¬×ª»»µ½°´¼üÏû¶¶ºÍÈ·ÈÏ×´Ì¬//
+                        //æŒ‰é”®è¢«æŒ‰ä¸‹ï¼ŒçŠ¶æ€è½¬æ¢åˆ°æŒ‰é”®æ¶ˆæŠ–å’Œç¡®è®¤çŠ¶æ€//
                   break;
             case key_state_1:
                   if(key == 0)
                   {
                         key_timer_cnt1 = 0;
                         key_state_buffer1 = key_state_2;
-                        //°´¼üÈÔÈ»´¦ÓÚ°´ÏÂ×´Ì¬
-                        //Ïû¶¶Íê³É£¬key_timer¿ªÊ¼×¼±¸¼ÆÊ±
-                        //×´Ì¬ÇĞ»»µ½°´ÏÂÊ±¼ä¼ÆÊ±×´Ì¬
+                        //æŒ‰é”®ä»ç„¶å¤„äºæŒ‰ä¸‹çŠ¶æ€
+                        //æ¶ˆæŠ–å®Œæˆï¼Œkey_timerå¼€å§‹å‡†å¤‡è®¡æ—¶
+                        //çŠ¶æ€åˆ‡æ¢åˆ°æŒ‰ä¸‹æ—¶é—´è®¡æ—¶çŠ¶æ€
                   }
                   else
                         key_state_buffer1 = key_state_0;
-                        //°´¼üÒÑ¾­Ì§Æğ£¬»Øµ½°´¼ü³õÊ¼×´Ì¬
-                  break;  //Íê³ÉÈí¼şÏû¶¶
+                        //æŒ‰é”®å·²ç»æŠ¬èµ·ï¼Œå›åˆ°æŒ‰é”®åˆå§‹çŠ¶æ€
+                  break;  //å®Œæˆè½¯ä»¶æ¶ˆæŠ–
             case key_state_2:
                   if(key == 1)
                   {
-                        key_return = key_click;  //°´¼üÌ§Æğ£¬²úÉúÒ»´Îclick²Ù×÷
-                        key_state_buffer1 = key_state_0;  //×ª»»µ½°´¼ü³õÊ¼×´Ì¬
+                        key_return = key_click;  //æŒ‰é”®æŠ¬èµ·ï¼Œäº§ç”Ÿä¸€æ¬¡clickæ“ä½œ
+                        key_state_buffer1 = key_state_0;  //è½¬æ¢åˆ°æŒ‰é”®åˆå§‹çŠ¶æ€
                   }
                   key_timer_cnt1++;
-                  if(key_timer_cnt1 >= 200 && key_timer_cnt1< 500)  //°´¼ü¼ÌĞø°´ÏÂ£¬¼ÆÊ±³¬¹ı2000msÇÒ²»³¬¹ı5000ms
+                  if(key_timer_cnt1 >= 200 && key_timer_cnt1< 500)  //æŒ‰é”®ç»§ç»­æŒ‰ä¸‹ï¼Œè®¡æ—¶è¶…è¿‡2000msä¸”ä¸è¶…è¿‡5000ms
                   {
-                        key_state_buffer1 = key_state_3;  //×ª»»µ½µÈ´ı°´¼üÊÍ·Å×´Ì¬
+                        key_state_buffer1 = key_state_3;  //è½¬æ¢åˆ°ç­‰å¾…æŒ‰é”®é‡Šæ”¾çŠ¶æ€
                   }
                   if(key_timer_cnt1>=500)
                   {
-                        key_state_buffer1 = key_state_3;  //×ª»»µ½µÈ´ı°´¼üÊÍ·Å×´Ì¬
+                        key_state_buffer1 = key_state_3;  //è½¬æ¢åˆ°ç­‰å¾…æŒ‰é”®é‡Šæ”¾çŠ¶æ€
                   }
                   break;
-            case key_state_3:  //µÈ´ı°´¼üÊÍ·Å
-                  if(key == 1)  //°´¼üÊÍ·Å
+            case key_state_3:  //ç­‰å¾…æŒ‰é”®é‡Šæ”¾
+                  if(key == 1)  //æŒ‰é”®é‡Šæ”¾
                         {
                 	  TUYA_APP_LOG_INFO("key is release\r\n");
-                	  TUYA_APP_LOG_INFO("the timecnt is:%d\r\n",key_timer_cnt1);    //´òÓ¡°´¼ü°´ÏÂµÄÊ±³¤
-                        if(key_timer_cnt1 >= 200 && key_timer_cnt1< 500)   //°´¼ü¼ÌĞø°´ÏÂ£¬¼ÆÊ±³¬¹ı2000msÇÒ²»³¬¹ı5000ms
+                	  TUYA_APP_LOG_INFO("the timecnt is:%d\r\n",key_timer_cnt1);    //æ‰“å°æŒ‰é”®æŒ‰ä¸‹çš„æ—¶é•¿
+                        if(key_timer_cnt1 >= 200 && key_timer_cnt1< 500)   //æŒ‰é”®ç»§ç»­æŒ‰ä¸‹ï¼Œè®¡æ—¶è¶…è¿‡2000msä¸”ä¸è¶…è¿‡5000ms
                         {
-                              key_return = key_long_2s;  //ËÍ»Ø³¤°´ÊÂ¼ş
+                              key_return = key_long_2s;  //é€å›é•¿æŒ‰äº‹ä»¶
                         }
                         if(key_timer_cnt1>=500)
                         {
                               key_return = key_long_5s;
                         }
-                        key_state_buffer1 = key_state_0;  //ÇĞ»Ø°´¼ü³õÊ¼×´Ì¬
+                        key_state_buffer1 = key_state_0;  //åˆ‡å›æŒ‰é”®åˆå§‹çŠ¶æ€
                         }
                   else
                   {
@@ -88,9 +88,9 @@ static unsigned char key_driver(void)
       return key_return;
 }
 /***************************************************************************
-º¯Êı¹¦ÄÜ£ºÖĞ²ã°´¼ü´¦Àíº¯Êı£¬µ÷ÓÃµ×²ãº¯ÊıÒ»´Î£¬´¦ÀíË«»÷ÊÂ¼şµÄÅĞ¶Ï£¬
-                                        ·µ»ØÉÏ²ãÕıÈ·µÄÎŞ¼ü¡¢µ¥»÷¡¢Ë«»÷¡¢¶Ì°´¡¢³¤°´5ÖÖ×´Ì¬
-±¾º¯ÊıÓÉÉÏ²ãÑ­»·µ÷ÓÃ£¬¼ä¸ô10ms
+å‡½æ•°åŠŸèƒ½ï¼šä¸­å±‚æŒ‰é”®å¤„ç†å‡½æ•°ï¼Œè°ƒç”¨åº•å±‚å‡½æ•°ä¸€æ¬¡ï¼Œå¤„ç†åŒå‡»äº‹ä»¶çš„åˆ¤æ–­ï¼Œ
+                                        è¿”å›ä¸Šå±‚æ­£ç¡®çš„æ— é”®ã€å•å‡»ã€åŒå‡»ã€çŸ­æŒ‰ã€é•¿æŒ‰5ç§çŠ¶æ€
+æœ¬å‡½æ•°ç”±ä¸Šå±‚å¾ªç¯è°ƒç”¨ï¼Œé—´éš”10ms
 ***************************************************************************/
 unsigned char key_read(void)
 {
@@ -104,24 +104,36 @@ unsigned char key_read(void)
             case key_state_0:
                   if(key == key_click)
                   {
-                        key_timer_cnt2 = 0;  //µÚÒ»´Îµ¥»÷£¬²»·µ»Ø£¬µ½ÏÂ¸ö×´Ì¬ÅĞ¶ÏÊÇ·ñ»á³öÏÖË«»÷
+                        key_timer_cnt2 = 0;  //ç¬¬ä¸€æ¬¡å•å‡»ï¼Œä¸è¿”å›ï¼Œåˆ°ä¸‹ä¸ªçŠ¶æ€åˆ¤æ–­æ˜¯å¦ä¼šå‡ºç°åŒå‡»
                         key_state_buffer2 = key_state_1;
+#if 1 //pwm
+
+    //PD2Â PWM3Â Â Â Â Â 1msÂ cycleÂ Â 1/3Â duty
+    gpio_set_func(GPIO_PD2,AS_PWM3);
+    gpio_set_func(GPIO_PC5,AS_PWM3_N);
+    pwm_set_mode(PWM3_ID,PWM_NORMAL_MODE);
+    pwm_set_phase(PWM3_ID,0);//noÂ phaseÂ atÂ pwmÂ beginning
+    pwm_set_cycle_and_duty(PWM3_ID,(u16)(1000*CLOCK_SYS_CLOCK_1US),(u16)(200*CLOCK_SYS_CLOCK_1US));
+    pwm_start(PWM3_ID);
+    TUYA_APP_LOG_INFO("pwm  init ");
+#endif
+
                   }
                   else
-                        key_return = key;  //¶ÔÓÚÎŞ¼ü¡¢³¤°´£¬·µ»ØÔ­ÊÂ¼ş
+                        key_return = key;  //å¯¹äºæ— é”®ã€é•¿æŒ‰ï¼Œè¿”å›åŸäº‹ä»¶
                   break;
             case key_state_1:
-                  if(key == key_click)  //ÓÖÒ»´Îµ¥»÷£¬Ê±¼ä¼ä¸ôĞ¡ÓÚ500ms
+                  if(key == key_click)  //åˆä¸€æ¬¡å•å‡»ï¼Œæ—¶é—´é—´éš”å°äº500ms
                   {
-                        key_return = key_double;  //·µ»ØË«»÷ÊÂ¼ş£¬»Øµ½³õÊ¼×´Ì¬
+                        key_return = key_double;  //è¿”å›åŒå‡»äº‹ä»¶ï¼Œå›åˆ°åˆå§‹çŠ¶æ€
                         key_state_buffer2 = key_state_0;
                   }
                   else if(++key_timer_cnt2 >= 50)
                   {
-                        //ÕâÀï500msÄÚ¿Ï¶¨¶Áµ½µÄ¶¼ÊÇÎŞ¼üÊÂ¼ş£¬ÒòÎª³¤°´´óÓÚ2000ms
-                        //ÔÚ2sÇ°µ×²ã·µ»ØµÄ¶¼ÊÇÎŞ¼ü
-                        key_return = key_click;  //500msÄÚÃ»ÓĞÔÙ´Î³öÏÖµ¥»÷ÊÂ¼ş£¬·µ»Øµ¥»÷ÊÂ¼ş
-                        key_state_buffer2 = key_state_0;  //·µ»Ø³õÊ¼×´Ì¬
+                        //è¿™é‡Œ500mså†…è‚¯å®šè¯»åˆ°çš„éƒ½æ˜¯æ— é”®äº‹ä»¶ï¼Œå› ä¸ºé•¿æŒ‰å¤§äº2000ms
+                        //åœ¨2så‰åº•å±‚è¿”å›çš„éƒ½æ˜¯æ— é”®
+                        key_return = key_click;  //500mså†…æ²¡æœ‰å†æ¬¡å‡ºç°å•å‡»äº‹ä»¶ï¼Œè¿”å›å•å‡»äº‹ä»¶
+                        key_state_buffer2 = key_state_0;  //è¿”å›åˆå§‹çŠ¶æ€
                   }
                   break;
       }

@@ -95,6 +95,7 @@ _attribute_ram_code_ int main (void)    //must run in ramcode
 
     irq_enable();
 
+    //while(1){wd_clear(); };
 	while (1)
 	{
 #if (MODULE_WATCHDOG_ENABLE)

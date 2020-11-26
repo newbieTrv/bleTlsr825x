@@ -30,7 +30,7 @@ extern "C" {
 
 /////////////////// MODULE /////////////////////////////////
 #define BLE_MODULE_PM_ENABLE				1
-#define PM_DEEPSLEEP_RETENTION_ENABLE		1
+#define PM_DEEPSLEEP_RETENTION_ENABLE		0
 
 #define BLE_OTA_ENABLE						0
 #define TELIK_SPP_SERVICE_ENABLE			1

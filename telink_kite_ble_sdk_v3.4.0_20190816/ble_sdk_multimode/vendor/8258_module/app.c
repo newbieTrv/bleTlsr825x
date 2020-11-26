@@ -28,6 +28,7 @@
 #include "battery_check.h"
 #include "tuya_ble_common.h"
 #include "tuya_ble_log.h"
+//#include "pwm.h"
 
 //module spp Tx / Rx fifo
 #define SPP_RXFIFO_SIZE		252
@@ -416,6 +417,19 @@ void user_init_normal(void)
 
 #endif
 
+#if 1 //pwm
+
+    //PD2 PWM3     1ms cycle  1/3 duty
+    gpio_set_func(GPIO_PD2,AS_PWM3);
+    gpio_set_func(GPIO_PC5,AS_PWM3_N);
+    pwm_set_mode(PWM3_ID,PWM_NORMAL_MODE);
+    pwm_set_phase(PWM3_ID,0);//no phase at pwm beginning
+    pwm_set_cycle_and_duty(PWM3_ID,(u16)(1000*CLOCK_SYS_CLOCK_1US),(u16)(200*CLOCK_SYS_CLOCK_1US));
+    pwm_start(PWM3_ID);
+    TUYA_APP_LOG_INFO("pwm  init ");
+#endif
+
+
 	//random number generator must be initiated here( in the beginning of user_init_nromal)
 	//when deepSleep retention wakeUp, no need initialize again
 	random_generator_init();  //this is must
@@ -585,6 +599,8 @@ void user_init_normal(void)
 
 	//uart_fifo_init(); 
 	//tuya_para_init();
+
+
 }
 
 
@@ -669,7 +685,7 @@ void main_loop (void)
 		rtc_timer_last_tick=clock_time();
 		tuya_rtc_timer_update_handler();
 	}
-
+//---
 	tuya_ble_main_tasks_exec();
 
 	ble_tx_exe();
@@ -678,6 +694,7 @@ void main_loop (void)
 	app_exe();//
 
 	log_exe();
+
 
 	//lowpower disable
 	if(0)
