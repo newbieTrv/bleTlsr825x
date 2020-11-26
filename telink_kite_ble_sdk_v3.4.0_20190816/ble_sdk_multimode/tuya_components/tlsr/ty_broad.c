@@ -1,4 +1,7 @@
 #include "tuya_ble_common.h"
+#include "MG_Key.h"
+
+#include "tuya_ble_log.h"
 
 //#define TY_DEVICE_PID "3224"
 
@@ -365,6 +368,43 @@ static s32 tuya_conncet_monitor_callback()
     }
     return -1;
 }
+int my_key_event()
+{
+      unsigned char temp = 0;
+      temp = key_read();
+      //printf("the temp is :%d\r\n",temp);
+      switch(temp)
+      {
+            //单击
+            case key_click:
+            {
+            	TUYA_APP_LOG_INFO("key_click!\r\n");
+                  break;
+            }
+            //双击
+            case key_double:
+            {
+            	TUYA_APP_LOG_INFO("key_double!\r\n");
+                  break;
+            }
+            //短按2s
+            case key_long_2s:
+            {
+            	TUYA_APP_LOG_INFO("key_long_2s!\r\n");
+                  break;
+            }
+            //长按5s
+            case key_long_5s:
+            {
+            	TUYA_APP_LOG_INFO("key_long_5s!\r\n");
+                  break;
+            }
+            default:
+                  break;
+      }
+      return 0;
+      //break;
+}
 
 
 
@@ -467,6 +507,13 @@ u32 tuya_timer_start(u8 timer_id,u32 time_ms_cnt)
 //		tuya_user_timer_start(blt_soft_timer_scan_timeout_handler, time_ms_cnt*1000);
 //		return 0;
 //	}
+
+	else if(timer_id==TIMER_KEY_EVENT)
+	{
+		bsp_timer_start(my_key_event,time_ms_cnt*1000);
+
+		return 0;
+	}
 
     return 1;
 }

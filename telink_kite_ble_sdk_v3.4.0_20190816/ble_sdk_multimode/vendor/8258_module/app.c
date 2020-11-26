@@ -27,7 +27,7 @@
 #include "spp.h"
 #include "battery_check.h"
 #include "tuya_ble_common.h"
-
+#include "tuya_ble_log.h"
 
 //module spp Tx / Rx fifo
 #define SPP_RXFIFO_SIZE		252
@@ -405,6 +405,16 @@ void hal_bt_set_mac(u8 mac[6])
 void user_init_normal(void)
 {
 	tuya_ble_app_init();
+
+#if 1  //key test
+    gpio_set_func(GPIO_PD7,AS_GPIO);
+    gpio_set_input_en(GPIO_PD7,1);
+    gpio_setup_up_down_resistor(GPIO_PD7,PM_PIN_PULLUP_10K);
+
+    tuya_timer_start(TIMER_KEY_EVENT,10);
+    TUYA_APP_LOG_INFO("key GPIO_PD7 init ");
+
+#endif
 
 	//random number generator must be initiated here( in the beginning of user_init_nromal)
 	//when deepSleep retention wakeUp, no need initialize again

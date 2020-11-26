@@ -246,6 +246,9 @@ void tuya_ble_app_init(void)
     tuya_print_sysInfor();
     TUYA_APP_LOG_INFO("app version : "TY_APP_VER_STR);
 
+
+
+
 }
 
 void app_exe()
